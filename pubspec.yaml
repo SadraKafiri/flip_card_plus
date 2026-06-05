@@ -1,0 +1,49 @@
+name: flip_card_plus
+description: A highly customizable 3D flip card widget for Flutter. Features smooth animations, drag-to-flip gestures, hover effects, custom curves, and zero-allocation performance.
+version: 1.0.4
+homepage: https://github.com/Itsxhadi/flip_card_plus
+repository: https://github.com/Itsxhadi/flip_card_plus
+issue_tracker: https://github.com/Itsxhadi/flip_card_plus/issues
+documentation: https://youtu.be/4-EGu33lxwY
+
+topics:
+  - flip-card
+  - animation-3d
+  - gesture
+  - ui
+  - animation
+
+screenshots:
+  - description: "flip_card_plus Banner"
+    path: screenshots/flip_card_banner.png
+  - description: "Example 1 - Showcase"
+    path: screenshots/Screenshot_20260605_094214.png
+  - description: "Example 2 - Showcase"
+    path: screenshots/Screenshot_20260605_094217.png
+  - description: "Example 3 - Showcase"
+    path: screenshots/Screenshot_20260605_094223.png
+  - description: "Example 4 - Showcase"
+    path: screenshots/Screenshot_20260605_094227.png
+  - description: "Example 5 - Showcase"
+    path: screenshots/Screenshot_20260605_094230.png
+  - description: "Example 6 - Showcase"
+    path: screenshots/Screenshot_20260605_094234.png
+  - description: "Example 7 - Showcase"
+    path: screenshots/Screenshot_20260605_094240.png
+  - description: "Example 8 - Showcase"
+    path: screenshots/Screenshot_20260605_094242.png
+  - description: "Example 9 - Showcase"
+    path: screenshots/Screenshot_20260605_094244.png
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+

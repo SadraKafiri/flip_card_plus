@@ -1,0 +1,12 @@
+example/ios/Flutter/flutter_export_environment.sh
+example/android/
+example/ios/
+example/web/
+example/.dart_tool/
+example/build/
+.dart_tool/
+build/
+.github/
+.vscode/
+.fvm/
+*.lock
