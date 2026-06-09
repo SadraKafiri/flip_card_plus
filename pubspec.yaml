@@ -1,10 +1,12 @@
 name: flip_card_plus
 description: A highly customizable 3D flip card widget for Flutter. Features smooth animations, drag-to-flip gestures, hover effects, custom curves, and zero-allocation performance.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/Itsxhadi/flip_card_plus
 repository: https://github.com/Itsxhadi/flip_card_plus
 issue_tracker: https://github.com/Itsxhadi/flip_card_plus/issues
 documentation: https://youtu.be/4-EGu33lxwY
+funding:
+  - https://www.paypal.com/donate/?hosted_button_id=VV3WVVCZDF6TC
 
 topics:
   - flip-card
@@ -14,6 +16,10 @@ topics:
   - animation
 
 screenshots:
+  - description: "Demo 1 - Live Animation"
+    path: screenshots/Demo 1.gif
+  - description: "Demo 2 - Live Animation"
+    path: screenshots/Demo 2.gif
   - description: "flip_card_plus Banner"
     path: screenshots/flip_card_banner.png
   - description: "Example 1 - Showcase"

@@ -1,3 +1,11 @@
+<p align="right">
+  <a href="https://www.paypal.com/donate/?hosted_button_id=VV3WVVCZDF6TC">
+    <img src="https://pics.paypal.com/00/s/M2M2MDJkODUtMmFiOS00OGFmLWE2MDQtMDgyYzQ2ZGNkMzc4/file.PNG" alt="Donate with PayPal button" height="35" />
+  </a>
+</p>
+
+> Copyright ©️ [Hadi](https://github.com/Itsxhadi) — flip_card_plus
+
 # flip_card_plus [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Itsxhadi/flip_card_plus/pulls) [![Pub Package](https://img.shields.io/pub/v/flip_card_plus.svg)](https://pub.dev/packages/flip_card_plus)
 
 <p align="center">
@@ -8,7 +16,13 @@ A premium Flutter component that provides a smooth, highly optimized 3D flip car
 
 ---
 
-## 🎬 Demo Video
+## 🎬 Demo
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Itsxhadi/flip_card_plus/main/screenshots/Demo%201.gif" width="280" alt="Demo 1 - flip_card_plus" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/Itsxhadi/flip_card_plus/main/screenshots/Demo%202.gif" width="280" alt="Demo 2 - flip_card_plus" />
+</p>
 
 <p align="center">
   <a href="https://youtube.com/shorts/4-EGu33lxwY?feature=share" target="_blank">
@@ -75,7 +89,7 @@ Add `flip_card_plus` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flip_card_plus: ^1.0.4
+  flip_card_plus: ^1.0.5
 ```
 
 Or run:
@@ -247,3 +261,23 @@ FlipCardPlus(
 - 📧 [hadi7786x@gmail.com](mailto:hadi7786x@gmail.com)
 - 🐙 [github.com/Itsxhadi](https://github.com/Itsxhadi)
 - 🎬 [YouTube Demo](https://youtube.com/shorts/4-EGu33lxwY?feature=share)
+
+---
+
+## 🤝 Contributing & Community
+
+> **Kindly submit a PR if you encounter any issues — and please make sure you're using stable channel releases.**
+
+Maintaining open source software ain't easy. If you've commercially used this software, please consider supporting its development:
+
+<a href="https://www.paypal.com/donate/?hosted_button_id=VV3WVVCZDF6TC">
+  <img src="https://pics.paypal.com/00/s/M2M2MDJkODUtMmFiOS00OGFmLWE2MDQtMDgyYzQ2ZGNkMzc4/file.PNG" alt="Donate with PayPal button" height="35" />
+</a>
+
+Feel free to check it out and give it a ⭐️ if you love it. Follow me for more updates and projects.
+
+Suggestions are warmly welcome & more updates are coming along the way... 🚀
+
+---
+
+> Copyright ©️ [Hadi](https://github.com/Itsxhadi) — flip_card_plus
