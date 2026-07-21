@@ -355,6 +355,12 @@ class FlipCardPlusState extends State<FlipCardPlus>
     return m;
   }
 
+  CardSide _getCardSide(double value) {
+    double progress = value % 2.0;
+    if (progress < 0) progress += 2.0;
+    return (progress <= 0.5 || progress >= 1.5) ? CardSide.front : CardSide.back;
+  }
+
   // ── Lifecycle ────────────────────────────────────────────────────────────
 
   @override
@@ -364,6 +370,8 @@ class FlipCardPlusState extends State<FlipCardPlus>
     controller = AnimationController(
       value: initialSide == CardSide.front ? 0.0 : 1.0,
       duration: widget.duration,
+      lowerBound: double.negativeInfinity,
+      upperBound: double.infinity,
       vsync: this,
     );
 
@@ -414,22 +422,39 @@ class FlipCardPlusState extends State<FlipCardPlus>
   Future<void> flip([CardSide? targetSide]) async {
     if (!mounted || widget.isDisabled) return;
 
-    final from = CardSide.fromAnimationStatus(controller.status);
+    final from = _getCardSide(controller.value);
     targetSide ??= from.opposite;
 
+    double targetValue;
+    if (targetSide == from) {
+      targetValue = controller.value.roundToDouble();
+    } else {
+      if (widget.keepSameDirection) {
+        targetValue = controller.value.roundToDouble() + 1.0;
+      } else {
+        if (from == CardSide.front) {
+          targetValue = controller.value.roundToDouble() + 1.0;
+        } else {
+          targetValue = controller.value.roundToDouble() - 1.0;
+        }
+      }
+    }
+
+    await _animateToValue(targetValue, explicitTargetSide: targetSide);
+  }
+
+  Future<void> _animateToValue(double targetValue, {CardSide? explicitTargetSide}) async {
+    final from = _getCardSide(controller.value);
+    final targetSide = explicitTargetSide ?? _getCardSide(targetValue);
+    
     // ignore: deprecated_member_use_from_same_package
     widget.onFlip?.call();
     widget.onFlipStart?.call(from, targetSide);
     _flipCount++;
 
-    switch (targetSide) {
-      case CardSide.front:
-        await controller.reverse().complete;
-        break;
-      case CardSide.back:
-        await controller.forward().complete;
-        break;
-    }
+    final distance = (targetValue - controller.value).abs();
+    final duration = widget.duration * distance;
+    await controller.animateTo(targetValue, duration: duration, curve: Curves.linear).complete;
 
     widget.onFlipDone?.call(targetSide);
   }
@@ -443,7 +468,7 @@ class FlipCardPlusState extends State<FlipCardPlus>
     if (widget.isDisabled) return;
     controller.stop();
 
-    final from = CardSide.fromAnimationStatus(controller.status);
+    final from = _getCardSide(controller.value);
     targetSide ??= from.opposite;
 
     // ignore: deprecated_member_use_from_same_package
@@ -451,21 +476,32 @@ class FlipCardPlusState extends State<FlipCardPlus>
     widget.onFlipStart?.call(from, targetSide);
     _flipCount++;
 
-    switch (targetSide) {
-      case CardSide.front:
-        controller.value = 0.0;
-        break;
-      case CardSide.back:
-        controller.value = 1.0;
-        break;
+    double targetValue;
+    if (targetSide == from) {
+      targetValue = controller.value.roundToDouble();
+    } else {
+      if (widget.keepSameDirection) {
+        targetValue = controller.value.roundToDouble() + 1.0;
+      } else {
+        if (from == CardSide.front) {
+          targetValue = controller.value.roundToDouble() + 1.0;
+        } else {
+          targetValue = controller.value.roundToDouble() - 1.0;
+        }
+      }
     }
+
+    controller.value = targetValue;
 
     widget.onFlipDone?.call(targetSide);
   }
 
+  /// Returns the currently active side of the card.
+  CardSide get currentSide => _getCardSide(controller.value);
+
   /// Returns the side opposite to the one currently shown.
   CardSide getOppositeSide() {
-    return CardSide.fromAnimationStatus(controller.status).opposite;
+    return _getCardSide(controller.value).opposite;
   }
 
   /// {@template flip_card.FlipCardPlusState.skew}
@@ -478,16 +514,12 @@ class FlipCardPlusState extends State<FlipCardPlus>
   /// {@endtemplate}
   Future<void> skew(double target, {Duration? duration, Curve? curve}) async {
     assert(0 <= target && target <= 1);
+    final base = (controller.value / 2.0).round() * 2.0; // nearest front side
+    final targetValue = base + target;
 
-    if (target > controller.value) {
-      await controller
-          .animateTo(target, duration: duration, curve: curve ?? Curves.linear)
-          .complete;
-    } else {
-      await controller
-          .animateBack(target, duration: duration, curve: curve ?? Curves.linear)
-          .complete;
-    }
+    await controller
+        .animateTo(targetValue, duration: duration, curve: curve ?? Curves.linear)
+        .complete;
   }
 
   /// {@template flip_card.FlipCardPlusState.hint}
@@ -503,7 +535,8 @@ class FlipCardPlusState extends State<FlipCardPlus>
     Curve curveTo = Curves.easeInOut,
     Curve curveBack = Curves.easeInOut,
   }) async {
-    if (controller.status != AnimationStatus.dismissed) return;
+    if (_getCardSide(controller.value) != CardSide.front || controller.isAnimating) return;
+    final currentValue = controller.value.roundToDouble();
 
     duration = duration ?? controller.duration!;
     final halfDuration =
@@ -511,11 +544,11 @@ class FlipCardPlusState extends State<FlipCardPlus>
 
     try {
       await controller
-          .animateTo(target, duration: halfDuration, curve: curveTo)
+          .animateTo(currentValue + target, duration: halfDuration, curve: curveTo)
           .complete;
     } finally {
       await controller
-          .animateBack(0, duration: halfDuration, curve: curveBack)
+          .animateTo(currentValue, duration: halfDuration, curve: curveBack)
           .complete;
     }
   }
@@ -543,7 +576,7 @@ class FlipCardPlusState extends State<FlipCardPlus>
       delta = (-details.delta.dy / size.height) * _flipMultiplier;
     }
 
-    controller.value = (controller.value + delta).clamp(0.0, 1.0);
+    controller.value += delta;
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -560,21 +593,24 @@ class FlipCardPlusState extends State<FlipCardPlus>
               _flipMultiplier;
     }
 
-    // A fast fling commits the flip regardless of current position.
     const flingThreshold = 0.3; // fractions/sec
-    final CardSide targetSide;
+    double targetValue;
     if (velocityFraction > flingThreshold) {
-      targetSide = CardSide.back;
+      targetValue = controller.value.ceilToDouble();
+      if (targetValue == controller.value) targetValue += 1.0;
     } else if (velocityFraction < -flingThreshold) {
-      targetSide = CardSide.front;
+      targetValue = controller.value.floorToDouble();
+      if (targetValue == controller.value) targetValue -= 1.0;
     } else {
-      // No fling — use the position threshold.
-      targetSide = controller.value >= widget.dragThreshold
-          ? CardSide.back
-          : CardSide.front;
+      final fraction = controller.value - controller.value.floorToDouble();
+      if (fraction >= widget.dragThreshold) {
+        targetValue = controller.value.floorToDouble() + 1.0;
+      } else {
+        targetValue = controller.value.floorToDouble();
+      }
     }
 
-    flip(targetSide);
+    _animateToValue(targetValue);
   }
 
   // ── Build ────────────────────────────────────────────────────────────────
@@ -607,12 +643,12 @@ class FlipCardPlusState extends State<FlipCardPlus>
       if (widget.flipOnHover) {
         child = MouseRegion(
           onEnter: (_) {
-            if (CardSide.fromAnimationStatus(controller.status) != CardSide.back) {
+            if (_getCardSide(controller.value) != CardSide.back) {
               flip(CardSide.back);
             }
           },
           onExit: (_) {
-            if (CardSide.fromAnimationStatus(controller.status) != CardSide.front) {
+            if (_getCardSide(controller.value) != CardSide.front) {
               flip(CardSide.front);
             }
           },

@@ -70,7 +70,7 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-    expect(state.controller.status, AnimationStatus.completed,
+    expect(state.currentSide, CardSide.back,
         reason: 'Ensure card flipped back');
 
     await widgetTester.tap(find.byType(TextButton));
@@ -95,12 +95,12 @@ void main() {
       );
 
       final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       await widgetTester.tap(find.byType(FlipCardPlus));
       await widgetTester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
     });
 
     testWidgets('back side', (widgetTester) async {
@@ -116,12 +116,12 @@ void main() {
       );
 
       final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
 
       await widgetTester.tap(find.byType(FlipCardPlus));
       await widgetTester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
     });
   });
 
@@ -140,12 +140,12 @@ void main() {
         ),
       );
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       await tester.tap(find.byType(FlipCardPlus));
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
     });
 
     testWidgets('manually', (WidgetTester tester) async {
@@ -165,8 +165,7 @@ void main() {
       await tester.tap(find.byType(FlipCardPlus));
       await tester.pumpAndSettle();
       expect(
-        state.controller.status,
-        AnimationStatus.dismissed,
+        state.currentSide, CardSide.front,
         reason: 'Should not have turned by tapping',
       );
 
@@ -176,8 +175,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        state.controller.status,
-        AnimationStatus.completed,
+        state.currentSide, CardSide.back,
         reason: 'Should have turned by manually calling flip',
       );
     });
@@ -202,7 +200,7 @@ void main() {
       await future;
       await tester.pumpAndSettle();
 
-      expect(controller.state.controller.status, AnimationStatus.completed);
+      expect(controller.state.currentSide, CardSide.back);
     });
 
     testWidgets('manually via controller without animation',
@@ -224,7 +222,7 @@ void main() {
       controller.flipWithoutAnimation();
       await tester.pump();
 
-      expect(controller.state.controller.status, AnimationStatus.completed);
+      expect(controller.state.currentSide, CardSide.back);
     });
   });
 
@@ -252,7 +250,7 @@ void main() {
       await future;
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.front);
     });
   });
 
@@ -278,7 +276,7 @@ void main() {
       await future;
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
     });
   });
 
@@ -313,7 +311,7 @@ void main() {
     });
 
     testWidgets(
-        'keepSameDirection uses ReverseAnimation during back-to-front flip',
+        'keepSameDirection continuously increases controller value during back-to-front flip',
         (WidgetTester tester) async {
       final controller = FlipCardPlusController();
 
@@ -331,31 +329,17 @@ void main() {
 
       // 1. Flip front → back
       final flip1 = controller.flip();
-      await tester.pump(const Duration(milliseconds: 250));
-
-      var transitions = tester
-          .widgetList<FlipPlusTransition>(find.byType(FlipPlusTransition))
-          .toList();
-      expect(transitions[0].animation is! ReverseAnimation, true);
-      expect(transitions[1].animation is! ReverseAnimation, true);
-
       await tester.pumpAndSettle();
       await flip1;
-      expect(controller.state.controller.status, AnimationStatus.completed);
+      expect(controller.state.currentSide, CardSide.back);
+      expect(controller.state.controller.value, 1.0);
 
       // 2. Flip back → front
       final flip2 = controller.flip();
-      await tester.pump(const Duration(milliseconds: 100));
-
-      transitions = tester
-          .widgetList<FlipPlusTransition>(find.byType(FlipPlusTransition))
-          .toList();
-      expect(transitions[0].animation.toString(), contains('ReverseAnimation'));
-      expect(transitions[1].animation.toString(), contains('ReverseAnimation'));
-
       await tester.pumpAndSettle();
       await flip2;
-      expect(controller.state.controller.status, AnimationStatus.dismissed);
+      expect(controller.state.currentSide, CardSide.front);
+      expect(controller.state.controller.value, 2.0); // Continues to increase!
     });
 
     testWidgets('hides perpendicular elements when static',
@@ -405,7 +389,7 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
     });
 
     testWidgets('flips when side parameter changes', (WidgetTester tester) async {
@@ -439,15 +423,15 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       await tester.tap(find.byType(TextButton));
       await tester.pumpAndSettle();
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
 
       await tester.tap(find.byType(TextButton));
       await tester.pumpAndSettle();
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
     });
   });
 
@@ -540,7 +524,7 @@ void main() {
       await tester.tap(find.byType(FlipCardPlus));
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed);
+      expect(state.currentSide, CardSide.back);
 
       final frontOpacity = tester.widget<Opacity>(
         find.ancestor(
@@ -685,13 +669,13 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       await tester.tap(find.byType(FlipCardPlus));
       await tester.pumpAndSettle();
 
       // Card must not have flipped
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
     });
 
     testWidgets('prevents flip via controller when disabled',
@@ -714,7 +698,7 @@ void main() {
       await controller.flip();
       await tester.pumpAndSettle();
 
-      expect(controller.state.controller.status, AnimationStatus.dismissed);
+      expect(controller.state.currentSide, CardSide.front);
     });
 
     testWidgets('prevents flipWithoutAnimation when disabled',
@@ -736,7 +720,7 @@ void main() {
       controller.flipWithoutAnimation();
       await tester.pump();
 
-      expect(controller.state.controller.status, AnimationStatus.dismissed);
+      expect(controller.state.currentSide, CardSide.front);
     });
   });
 
@@ -1004,7 +988,7 @@ void main() {
     testWidgets('drag past threshold flips the card',
         (WidgetTester tester) async {
       final state = await buildDragCard(tester);
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       // Simulate drag: start in card center, move 170px left (57% of 300px)
       final center = tester.getCenter(find.byType(FlipCardPlus));
@@ -1018,7 +1002,7 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed,
+      expect(state.currentSide, CardSide.back,
           reason: 'Card should snap to back after drag past 50% threshold');
     });
 
@@ -1040,7 +1024,7 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed,
+      expect(state.currentSide, CardSide.front,
           reason: 'Card should snap back below threshold with low velocity');
     });
 
@@ -1058,7 +1042,7 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed,
+      expect(state.currentSide, CardSide.front,
           reason: 'Disabled card must not flip on drag');
     });
   });
@@ -1079,7 +1063,7 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       // Hover enter
       final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
@@ -1090,14 +1074,14 @@ void main() {
       await gesture.moveTo(center);
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed,
+      expect(state.currentSide, CardSide.back,
           reason: 'Hovering over card should trigger flip to back');
 
       // Hover exit
       await gesture.moveTo(Offset.infinite);
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed,
+      expect(state.currentSide, CardSide.front,
           reason: 'Exiting hover should trigger flip to front');
     });
   });
@@ -1211,7 +1195,7 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       // Focus the card
       final focusNodeOfWidget = Focus.of(tester.element(find.text('front')));
@@ -1221,13 +1205,13 @@ void main() {
       // Press Space
       await tester.sendKeyEvent(LogicalKeyboardKey.space);
       await tester.pumpAndSettle();
-      expect(state.controller.status, AnimationStatus.completed,
+      expect(state.currentSide, CardSide.back,
           reason: 'Pressing Space key on focused card should trigger flip');
 
       // Press Enter
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
-      expect(state.controller.status, AnimationStatus.dismissed,
+      expect(state.currentSide, CardSide.front,
           reason: 'Pressing Enter key on focused card should trigger flip back');
     });
   });
@@ -1353,7 +1337,7 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.completed,
+      expect(state.currentSide, CardSide.back,
           reason: 'Should commit flip because drag (13%) is above threshold (10%)');
     });
 
@@ -1372,7 +1356,7 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
 
-      expect(state.controller.status, AnimationStatus.dismissed,
+      expect(state.currentSide, CardSide.front,
           reason: 'Should snap back because drag (80%) is below threshold (90%)');
     });
   });
@@ -1392,7 +1376,7 @@ void main() {
       );
 
       final state = tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
-      expect(state.controller.status, AnimationStatus.dismissed);
+      expect(state.currentSide, CardSide.front);
 
       // Call flip three times in the same frame
       state.flip();

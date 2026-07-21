@@ -193,9 +193,6 @@ class FlipCardPlusTransition extends StatefulWidget {
 }
 
 class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
-  late CardSide _currentSide;
-  AnimationStatus? _oldStatus;
-  bool _isBackToFront = false;
   late Widget _front;
   late Widget _back;
   late bool _isFrontHalf;
@@ -204,18 +201,18 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
   late Animation<double> _backAnimation;
 
   void _updateAnimations() {
-    final isReverse = widget.keepSameDirection && _isBackToFront;
-    final parentAnimation = isReverse
-        ? ReverseAnimation(widget.animation)
-        : widget.animation;
-
-    if (isReverse) {
-      _frontAnimation = _effectiveBackAnimator.animate(parentAnimation);
-      _backAnimation = _effectiveFrontAnimator.animate(parentAnimation);
-    } else {
-      _frontAnimation = _effectiveFrontAnimator.animate(parentAnimation);
-      _backAnimation = _effectiveBackAnimator.animate(parentAnimation);
-    }
+    _frontAnimation = _MappedAnimation(
+      parent: widget.animation,
+      frontAnimator: _effectiveFrontAnimator,
+      backAnimator: _effectiveBackAnimator,
+      isFront: true,
+    );
+    _backAnimation = _MappedAnimation(
+      parent: widget.animation,
+      frontAnimator: _effectiveFrontAnimator,
+      backAnimator: _effectiveBackAnimator,
+      isFront: false,
+    );
   }
 
   @override
@@ -223,10 +220,11 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
     super.initState();
     _front = widget.front;
     _back = widget.back;
-    _currentSide = CardSide.fromAnimationStatus(widget.animation.status);
-    _oldStatus = widget.animation.status;
-    _isFrontHalf = widget.animation.value <= 0.5;
-    widget.animation.addStatusListener(_handleChange);
+    
+    double progress = widget.animation.value % 2.0;
+    if (progress < 0) progress += 2.0;
+    _isFrontHalf = progress <= 0.5 || progress >= 1.5;
+    
     widget.animation.addListener(_handleAnimationUpdate);
     _updateAnimations();
   }
@@ -240,14 +238,12 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
         widget.curve != oldWidget.curve ||
         widget.reverseCurve != oldWidget.reverseCurve ||
         widget.keepSameDirection != oldWidget.keepSameDirection) {
-      oldWidget.animation.removeStatusListener(_handleChange);
       oldWidget.animation.removeListener(_handleAnimationUpdate);
-      widget.animation.addStatusListener(_handleChange);
       widget.animation.addListener(_handleAnimationUpdate);
-      _currentSide = CardSide.fromAnimationStatus(widget.animation.status);
-      _oldStatus = widget.animation.status;
-      _isBackToFront = false;
-      _isFrontHalf = widget.animation.value <= 0.5;
+      
+      double progress = widget.animation.value % 2.0;
+      if (progress < 0) progress += 2.0;
+      _isFrontHalf = progress <= 0.5 || progress >= 1.5;
     }
     _updateAnimations();
     _handleAnimationUpdate();
@@ -255,64 +251,34 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
 
   @override
   void dispose() {
-    widget.animation.removeStatusListener(_handleChange);
     widget.animation.removeListener(_handleAnimationUpdate);
     super.dispose();
   }
 
-  void _handleChange(AnimationStatus status) {
-    bool statusChanged = false;
-    if (status == AnimationStatus.reverse) {
-      if (_oldStatus == AnimationStatus.completed) {
-        _isBackToFront = true;
-        statusChanged = true;
-      }
-    } else {
-      if (_isBackToFront) {
-        _isBackToFront = false;
-        statusChanged = true;
-      }
-    }
-    _oldStatus = status;
-
-    final newSide = CardSide.fromAnimationStatus(status);
-    bool sideChanged = newSide != _currentSide;
-    if (sideChanged) {
-      setState(() {
-        _currentSide = newSide;
-      });
-    }
-
-    if (statusChanged || sideChanged) {
-      _updateAnimations();
-      if (!sideChanged) {
-        setState(() {});
-      }
-    }
-  }
-
   void _handleAnimationUpdate() {
     final value = widget.animation.value;
-    final status = widget.animation.status;
-    final isStatic = status == AnimationStatus.dismissed ||
-        status == AnimationStatus.completed;
+    final isStatic = widget.animation.status == AnimationStatus.dismissed ||
+        widget.animation.status == AnimationStatus.completed;
 
     bool updated = false;
 
-    final isFrontHalf = value <= 0.5;
+    double progress = value % 2.0;
+    if (progress < 0) progress += 2.0;
+    final isFrontHalf = progress <= 0.5 || progress >= 1.5;
+
     if (isFrontHalf != _isFrontHalf) {
       _isFrontHalf = isFrontHalf;
       updated = true;
     }
 
-    if (isStatic || value > 0.5) {
+    if (isStatic || !isFrontHalf) {
       if (_front != widget.front) {
         _front = widget.front;
         updated = true;
       }
     }
 
-    if (isStatic || value < 0.5) {
+    if (isStatic || isFrontHalf) {
       if (_back != widget.back) {
         _back = widget.back;
         updated = true;
@@ -347,7 +313,7 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
 
   @override
   Widget build(BuildContext context) {
-    final showingFront = _currentSide == CardSide.front;
+    final showingFront = _isFrontHalf;
 
     final Widget frontChild;
     final Widget backChild;
@@ -378,7 +344,7 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
 
   Widget _buildContent({required Widget child}) {
     final isFront = child == _front;
-    final showingFront = _currentSide == CardSide.front;
+    final showingFront = _isFrontHalf;
 
     final Animation<double> animation = isFront ? _frontAnimation : _backAnimation;
 
@@ -522,6 +488,34 @@ class FlipPlusTransition extends AnimatedWidget {
     }
 
     return result;
+  }
+}
+
+class _MappedAnimation extends Animation<double>
+    with AnimationWithParentMixin<double> {
+  _MappedAnimation({
+    required this.parent,
+    required this.frontAnimator,
+    required this.backAnimator,
+    required this.isFront,
+  });
+
+  @override
+  final Animation<double> parent;
+  final Animatable<double> frontAnimator;
+  final Animatable<double> backAnimator;
+  final bool isFront;
+
+  @override
+  double get value {
+    double progress = parent.value % 2.0;
+    if (progress < 0) progress += 2.0;
+
+    if (progress <= 1.0) {
+      return (isFront ? frontAnimator : backAnimator).transform(progress);
+    } else {
+      return (isFront ? backAnimator : frontAnimator).transform(progress - 1.0);
+    }
   }
 }
 
