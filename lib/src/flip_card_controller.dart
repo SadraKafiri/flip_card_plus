@@ -86,4 +86,3 @@ class FlipCardPlusController {
         curveBack: curveBack,
       );
 }
-

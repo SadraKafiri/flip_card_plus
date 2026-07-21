@@ -9,6 +9,7 @@ import 'flip_card_controller.dart';
 enum CardSide {
   /// The front side of the card.
   front,
+
   /// The back side of the card.
   back;
 
@@ -39,8 +40,10 @@ enum CardSide {
 enum Fill {
   /// Keep the original dimensions of both faces.
   none,
+
   /// Size the front face to match the back face.
   front,
+
   /// Size the back face to match the front face.
   back,
 }
@@ -120,7 +123,8 @@ class FlipCardPlus extends StatefulWidget {
     required this.back,
     this.duration = const Duration(milliseconds: 500),
     // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use onFlipStart instead. onFlip will be removed in a future release.')
+    @Deprecated(
+        'Use onFlipStart instead. onFlip will be removed in a future release.')
     this.onFlip,
     this.onFlipStart,
     this.onFlipDone,
@@ -358,7 +362,9 @@ class FlipCardPlusState extends State<FlipCardPlus>
   CardSide _getCardSide(double value) {
     double progress = value % 2.0;
     if (progress < 0) progress += 2.0;
-    return (progress <= 0.5 || progress >= 1.5) ? CardSide.front : CardSide.back;
+    return (progress <= 0.5 || progress >= 1.5)
+        ? CardSide.front
+        : CardSide.back;
   }
 
   // ── Lifecycle ────────────────────────────────────────────────────────────
@@ -443,10 +449,11 @@ class FlipCardPlusState extends State<FlipCardPlus>
     await _animateToValue(targetValue, explicitTargetSide: targetSide);
   }
 
-  Future<void> _animateToValue(double targetValue, {CardSide? explicitTargetSide}) async {
+  Future<void> _animateToValue(double targetValue,
+      {CardSide? explicitTargetSide}) async {
     final from = _getCardSide(controller.value);
     final targetSide = explicitTargetSide ?? _getCardSide(targetValue);
-    
+
     // ignore: deprecated_member_use_from_same_package
     widget.onFlip?.call();
     widget.onFlipStart?.call(from, targetSide);
@@ -454,7 +461,9 @@ class FlipCardPlusState extends State<FlipCardPlus>
 
     final distance = (targetValue - controller.value).abs();
     final duration = widget.duration * distance;
-    await controller.animateTo(targetValue, duration: duration, curve: Curves.linear).complete;
+    await controller
+        .animateTo(targetValue, duration: duration, curve: Curves.linear)
+        .complete;
 
     widget.onFlipDone?.call(targetSide);
   }
@@ -509,23 +518,26 @@ class FlipCardPlusState extends State<FlipCardPlus>
   ///
   /// Use with a [MouseRegion] to hint that the card is flippable.
   /// Call `skew(0)` to return to the original position.
+  /// Works relative to whichever side (front or back) is currently active.
   ///
   /// Returns a [Future] that resolves when the animation completes.
   /// {@endtemplate}
   Future<void> skew(double target, {Duration? duration, Curve? curve}) async {
     assert(0 <= target && target <= 1);
-    final base = (controller.value / 2.0).round() * 2.0; // nearest front side
+    final base = controller.value
+        .roundToDouble(); // nearest resting position (front or back)
     final targetValue = base + target;
 
     await controller
-        .animateTo(targetValue, duration: duration, curve: curve ?? Curves.linear)
+        .animateTo(targetValue,
+            duration: duration, curve: curve ?? Curves.linear)
         .complete;
   }
 
   /// {@template flip_card.FlipCardPlusState.hint}
   /// Partially flips the card to [target] and back, hinting it can be flipped.
   ///
-  /// Does nothing when the card is not at the front (dismissed) position.
+  /// Works on whichever side (front or back) is currently active.
   ///
   /// Returns a [Future] that resolves when the animation completes.
   /// {@endtemplate}
@@ -535,7 +547,7 @@ class FlipCardPlusState extends State<FlipCardPlus>
     Curve curveTo = Curves.easeInOut,
     Curve curveBack = Curves.easeInOut,
   }) async {
-    if (_getCardSide(controller.value) != CardSide.front || controller.isAnimating) return;
+    if (controller.isAnimating) return;
     final currentValue = controller.value.roundToDouble();
 
     duration = duration ?? controller.duration!;
@@ -544,7 +556,8 @@ class FlipCardPlusState extends State<FlipCardPlus>
 
     try {
       await controller
-          .animateTo(currentValue + target, duration: halfDuration, curve: curveTo)
+          .animateTo(currentValue + target,
+              duration: halfDuration, curve: curveTo)
           .complete;
     } finally {
       await controller
@@ -552,7 +565,6 @@ class FlipCardPlusState extends State<FlipCardPlus>
           .complete;
     }
   }
-
   // ── Drag gesture handlers ────────────────────────────────────────────────
 
   void _handleDragStart(DragStartDetails _) {
@@ -585,12 +597,11 @@ class FlipCardPlusState extends State<FlipCardPlus>
     // Normalise fling velocity to fractions-of-card-size per second.
     final double velocityFraction;
     if (_flipAxis == Axis.horizontal) {
-      velocityFraction =
-          (-details.velocity.pixelsPerSecond.dx / size.width) * effectiveFlipMultiplier;
+      velocityFraction = (-details.velocity.pixelsPerSecond.dx / size.width) *
+          effectiveFlipMultiplier;
     } else {
-      velocityFraction =
-          (-details.velocity.pixelsPerSecond.dy / size.height) *
-              _flipMultiplier;
+      velocityFraction = (-details.velocity.pixelsPerSecond.dy / size.height) *
+          _flipMultiplier;
     }
 
     const flingThreshold = 0.3; // fractions/sec
@@ -713,4 +724,3 @@ class FlipCardPlusState extends State<FlipCardPlus>
     return child;
   }
 }
-

@@ -53,7 +53,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
             ),
             outlinedButtonTheme: OutlinedButtonThemeData(
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
             ),
           ),
@@ -102,7 +104,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
             ),
             outlinedButtonTheme: OutlinedButtonThemeData(
@@ -112,7 +115,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
             ),
           ),
@@ -135,7 +139,14 @@ class _DemoShell extends StatefulWidget {
 class _DemoShellState extends State<_DemoShell> {
   int _tab = 0;
 
-  static const _tabLabels = ['Basic', 'Drag', 'Style', 'Control', 'Advanced', 'Showcases'];
+  static const _tabLabels = [
+    'Basic',
+    'Drag',
+    'Style',
+    'Control',
+    'Advanced',
+    'Showcases'
+  ];
   static const _tabIcons = [
     Icons.touch_app_outlined,
     Icons.swipe_outlined,
@@ -160,9 +171,12 @@ class _DemoShellState extends State<_DemoShell> {
             builder: (context, mode, _) {
               final isDark = mode == ThemeMode.dark;
               return IconButton(
-                icon: Icon(isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+                icon: Icon(isDark
+                    ? Icons.light_mode_outlined
+                    : Icons.dark_mode_outlined),
                 onPressed: () {
-                  themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark;
+                  themeNotifier.value =
+                      isDark ? ThemeMode.light : ThemeMode.dark;
                 },
               );
             },
@@ -375,9 +389,7 @@ class _DragPageState extends State<_DragPage> {
               children: [
                 Chip(
                   avatar: Icon(
-                    _vertical
-                        ? Icons.swipe_vertical
-                        : Icons.swipe_outlined,
+                    _vertical ? Icons.swipe_vertical : Icons.swipe_outlined,
                     size: 18,
                   ),
                   label: Text(
@@ -394,8 +406,7 @@ class _DragPageState extends State<_DragPage> {
                     flipOnDrag: true,
                     flipOnTouch: false,
                     dragThreshold: 0.4,
-                    direction:
-                        _vertical ? Axis.vertical : Axis.horizontal,
+                    direction: _vertical ? Axis.vertical : Axis.horizontal,
                     duration: const Duration(milliseconds: 400),
                     front: _CardFace(
                       label: 'Question',
@@ -663,8 +674,7 @@ class _ControlPageState extends State<_ControlPage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _log.length,
-                  separatorBuilder: (_, __) =>
-                      const Divider(height: 1),
+                  separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (_, i) => ListTile(
                     dense: true,
                     leading: Icon(
@@ -804,7 +814,9 @@ class _AdvancedPageState extends State<_AdvancedPage> {
               SizedBox(
                 width: 50,
                 child: Text(
-                  _perspective == 0.0 ? 'Flat' : _perspective.toStringAsFixed(4),
+                  _perspective == 0.0
+                      ? 'Flat'
+                      : _perspective.toStringAsFixed(4),
                   style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                   textAlign: TextAlign.end,
                 ),
@@ -903,7 +915,8 @@ class _AdvancedPageState extends State<_AdvancedPage> {
                 borderRadius: BorderRadius.circular(24),
                 front: _CardFace(
                   label: 'Performance Card',
-                  sub: 'RepaintBoundary: ${_useRepaintBoundary ? "ON" : "OFF"}\nClip: ${_clipBehavior.name}',
+                  sub:
+                      'RepaintBoundary: ${_useRepaintBoundary ? "ON" : "OFF"}\nClip: ${_clipBehavior.name}',
                   color: cs.primary,
                   icon: Icons.speed_outlined,
                 ),
@@ -919,7 +932,8 @@ class _AdvancedPageState extends State<_AdvancedPage> {
           const SizedBox(height: 12),
           SwitchListTile(
             title: const Text('Use RepaintBoundary'),
-            subtitle: const Text('Isolates paint cycles of card faces during rotation'),
+            subtitle: const Text(
+                'Isolates paint cycles of card faces during rotation'),
             value: _useRepaintBoundary,
             onChanged: (v) => setState(() => _useRepaintBoundary = v),
           ),
@@ -979,9 +993,9 @@ class _AdvancedPageState extends State<_AdvancedPage> {
               child: Builder(
                 builder: (context) {
                   final platform = Theme.of(context).platform;
-                  final isDesktop = platform == TargetPlatform.windows || 
-                                    platform == TargetPlatform.macOS || 
-                                    platform == TargetPlatform.linux;
+                  final isDesktop = platform == TargetPlatform.windows ||
+                      platform == TargetPlatform.macOS ||
+                      platform == TargetPlatform.linux;
                   return FlipCardPlus(
                     flipOnHover: isDesktop,
                     flipOnTouch: true,
@@ -994,12 +1008,16 @@ class _AdvancedPageState extends State<_AdvancedPage> {
                     },
                     borderRadius: BorderRadius.circular(20),
                     front: _CardFace(
-                      label: isDesktop ? 'Desktop Mode (Windows/macOS)' : 'Mobile Mode (iOS/Android)',
-                      sub: isDesktop 
-                          ? 'Hover with mouse or click to flip' 
+                      label: isDesktop
+                          ? 'Desktop Mode (Windows/macOS)'
+                          : 'Mobile Mode (iOS/Android)',
+                      sub: isDesktop
+                          ? 'Hover with mouse or click to flip'
                           : 'Swipe/drag or tap to flip (Haptics active)',
                       color: isDesktop ? Colors.blueAccent : Colors.tealAccent,
-                      icon: isDesktop ? Icons.desktop_windows : Icons.phone_iphone,
+                      icon: isDesktop
+                          ? Icons.desktop_windows
+                          : Icons.phone_iphone,
                     ),
                     back: _CardFace(
                       label: 'Adaptive Flipped!',
@@ -1025,7 +1043,8 @@ class _ShowcasesPage extends StatefulWidget {
   State<_ShowcasesPage> createState() => _ShowcasesPageState();
 }
 
-class _ShowcasesPageState extends State<_ShowcasesPage> with SingleTickerProviderStateMixin {
+class _ShowcasesPageState extends State<_ShowcasesPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -1103,7 +1122,8 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
           const SizedBox(height: 8),
           Text(
             'Tap or swipe card to see the security code on the back.',
-            style: TextStyle(color: cs.onSurface.withOpacity(0.6), fontSize: 13),
+            style:
+                TextStyle(color: cs.onSurface.withOpacity(0.6), fontSize: 13),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
@@ -1159,7 +1179,8 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                               ),
                             ],
                           ),
-                          Icon(Icons.wifi, color: cs.onSurface.withOpacity(0.4), size: 20),
+                          Icon(Icons.wifi,
+                              color: cs.onSurface.withOpacity(0.4), size: 20),
                         ],
                       ),
                       Row(
@@ -1168,7 +1189,9 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                             width: 42,
                             height: 30,
                             decoration: BoxDecoration(
-                              border: Border.all(color: cs.onSurface.withOpacity(0.2), width: 1.2),
+                              border: Border.all(
+                                  color: cs.onSurface.withOpacity(0.2),
+                                  width: 1.2),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Stack(
@@ -1178,21 +1201,24 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                                   left: 0,
                                   right: 0,
                                   height: 1,
-                                  child: Container(color: cs.onSurface.withOpacity(0.2)),
+                                  child: Container(
+                                      color: cs.onSurface.withOpacity(0.2)),
                                 ),
                                 Positioned(
                                   left: 14,
                                   top: 0,
                                   bottom: 0,
                                   width: 1,
-                                  child: Container(color: cs.onSurface.withOpacity(0.2)),
+                                  child: Container(
+                                      color: cs.onSurface.withOpacity(0.2)),
                                 ),
                                 Positioned(
                                   right: 14,
                                   top: 0,
                                   bottom: 0,
                                   width: 1,
-                                  child: Container(color: cs.onSurface.withOpacity(0.2)),
+                                  child: Container(
+                                      color: cs.onSurface.withOpacity(0.2)),
                                 ),
                               ],
                             ),
@@ -1216,11 +1242,16 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                             children: [
                               Text(
                                 'CARDHOLDER',
-                                style: TextStyle(color: cs.onSurface.withOpacity(0.4), fontSize: 8),
+                                style: TextStyle(
+                                    color: cs.onSurface.withOpacity(0.4),
+                                    fontSize: 8),
                               ),
                               Text(
                                 'HADI',
-                                style: TextStyle(color: cs.onSurface.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w400),
+                                style: TextStyle(
+                                    color: cs.onSurface.withOpacity(0.8),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
                               ),
                             ],
                           ),
@@ -1229,11 +1260,16 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                             children: [
                               Text(
                                 'EXPIRES',
-                                style: TextStyle(color: cs.onSurface.withOpacity(0.4), fontSize: 8),
+                                style: TextStyle(
+                                    color: cs.onSurface.withOpacity(0.4),
+                                    fontSize: 8),
                               ),
                               Text(
                                 '12/29',
-                                style: TextStyle(color: cs.onSurface.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w400),
+                                style: TextStyle(
+                                    color: cs.onSurface.withOpacity(0.8),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
                               ),
                             ],
                           ),
@@ -1244,7 +1280,9 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                                 width: 20,
                                 height: 20,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: cs.onSurface.withOpacity(0.4), width: 1.2),
+                                  border: Border.all(
+                                      color: cs.onSurface.withOpacity(0.4),
+                                      width: 1.2),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -1254,7 +1292,9 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                                   width: 20,
                                   height: 20,
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: cs.onSurface.withOpacity(0.4), width: 1.2),
+                                    border: Border.all(
+                                        color: cs.onSurface.withOpacity(0.4),
+                                        width: 1.2),
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -1337,7 +1377,9 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           'For customer service call +1 (800) FLIP-PLUS. Issued under license by FlipCardPlus Labs.',
-                          style: TextStyle(color: cs.onSurface.withOpacity(0.3), fontSize: 8),
+                          style: TextStyle(
+                              color: cs.onSurface.withOpacity(0.3),
+                              fontSize: 8),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -1359,7 +1401,8 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
               const SizedBox(width: 16),
               OutlinedButton.icon(
                 onPressed: () => setState(() => _useVertical = !_useVertical),
-                icon: Icon(_useVertical ? Icons.swipe_vertical : Icons.swipe, size: 18),
+                icon: Icon(_useVertical ? Icons.swipe_vertical : Icons.swipe,
+                    size: 18),
                 label: Text(_useVertical ? 'Vertical' : 'Horizontal'),
               ),
             ],
@@ -1367,7 +1410,8 @@ class _CreditCardShowcaseState extends State<_CreditCardShowcase> {
           const SizedBox(height: 32),
           const _ShowcaseExplanation(
             title: 'Interactive Payment Card Showcase',
-            description: 'This showcase demonstrates how FlipCardPlus can be used to build a realistic 3D payment card interface. It highlights horizontal/vertical swipe-to-reveal animations, custom 3D perspective depth, and theme adaptation. The signature and CVV are hidden on the back of the card, mimicking real-world payment flows.',
+            description:
+                'This showcase demonstrates how FlipCardPlus can be used to build a realistic 3D payment card interface. It highlights horizontal/vertical swipe-to-reveal animations, custom 3D perspective depth, and theme adaptation. The signature and CVV are hidden on the back of the card, mimicking real-world payment flows.',
           ),
         ],
       ),
@@ -1384,12 +1428,18 @@ class _MemoryGameShowcase extends StatefulWidget {
 
 class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
   final List<IconData> _symbols = [
-    Icons.radio_button_unchecked, Icons.radio_button_unchecked,
-    Icons.crop_square, Icons.crop_square,
-    Icons.change_history, Icons.change_history,
-    Icons.star_border, Icons.star_border,
-    Icons.close, Icons.close,
-    Icons.remove, Icons.remove,
+    Icons.radio_button_unchecked,
+    Icons.radio_button_unchecked,
+    Icons.crop_square,
+    Icons.crop_square,
+    Icons.change_history,
+    Icons.change_history,
+    Icons.star_border,
+    Icons.star_border,
+    Icons.close,
+    Icons.close,
+    Icons.remove,
+    Icons.remove,
   ];
 
   late List<bool> _flipped;
@@ -1469,11 +1519,17 @@ class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
             children: [
               Text(
                 'Moves: $_moves',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: cs.onSurface.withOpacity(0.6)),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: cs.onSurface.withOpacity(0.6)),
               ),
               Text(
                 'Matches: $_pairsMatched / 6',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: cs.onSurface.withOpacity(0.6)),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: cs.onSurface.withOpacity(0.6)),
               ),
               IconButton(
                 icon: const Icon(Icons.refresh, size: 18),
@@ -1528,9 +1584,7 @@ class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
                         : const Color(0xFFE5E5EA),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isMatched
-                          ? cs.primary
-                          : cs.outline,
+                      color: isMatched ? cs.primary : cs.outline,
                       width: 1,
                     ),
                   ),
@@ -1538,7 +1592,9 @@ class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
                     child: Icon(
                       _symbols[index],
                       size: 28,
-                      color: isMatched ? cs.primary : cs.onSurface.withOpacity(0.7),
+                      color: isMatched
+                          ? cs.primary
+                          : cs.onSurface.withOpacity(0.7),
                     ),
                   ),
                 ),
@@ -1549,7 +1605,10 @@ class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
           if (_pairsMatched == 6) ...[
             Text(
               'Excellent memory.',
-              style: TextStyle(color: cs.onSurface.withOpacity(0.8), fontSize: 15, fontWeight: FontWeight.w300),
+              style: TextStyle(
+                  color: cs.onSurface.withOpacity(0.8),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -1557,7 +1616,8 @@ class _MemoryGameShowcaseState extends State<_MemoryGameShowcase> {
           const SizedBox(height: 16),
           const _ShowcaseExplanation(
             title: 'Memory Match Game Showcase',
-            description: 'A classic memory matching game built with a grid of 12 FlipCardPlus widgets. Flipping is controlled programmatically via FlipCardPlusController (touch flipping is disabled). It demonstrates state management, batch flipping, and matched card persistence.',
+            description:
+                'A classic memory matching game built with a grid of 12 FlipCardPlus widgets. Flipping is controlled programmatically via FlipCardPlusController (touch flipping is disabled). It demonstrates state management, batch flipping, and matched card persistence.',
           ),
         ],
       ),
@@ -1628,7 +1688,8 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                             top: 8,
                             left: 8,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius: BorderRadius.circular(4),
@@ -1653,11 +1714,17 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                         children: [
                           Text(
                             'AeroSound Pro Plus',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: cs.onSurface),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: cs.onSurface),
                           ),
                           Text(
                             '\$199.99',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: cs.primary),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: cs.primary),
                           ),
                         ],
                       ),
@@ -1668,11 +1735,14 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                           const Icon(Icons.star, color: Colors.amber, size: 14),
                           const Icon(Icons.star, color: Colors.amber, size: 14),
                           const Icon(Icons.star, color: Colors.amber, size: 14),
-                          Icon(Icons.star_half, color: cs.onSurface.withOpacity(0.3), size: 14),
+                          Icon(Icons.star_half,
+                              color: cs.onSurface.withOpacity(0.3), size: 14),
                           const SizedBox(width: 6),
                           Text(
                             '4.8 (124 reviews)',
-                            style: TextStyle(color: cs.onSurface.withOpacity(0.5), fontSize: 11),
+                            style: TextStyle(
+                                color: cs.onSurface.withOpacity(0.5),
+                                fontSize: 11),
                           ),
                         ],
                       ),
@@ -1703,7 +1773,10 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                         children: [
                           Text(
                             'Customize Specs',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: cs.onSurface),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: cs.onSurface),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close, size: 18),
@@ -1714,11 +1787,15 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                       const SizedBox(height: 8),
                       Text(
                         'Select Color',
-                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: cs.onSurface.withOpacity(0.5)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: cs.onSurface.withOpacity(0.5)),
                       ),
                       const SizedBox(height: 6),
                       Row(
-                        children: ['Matte Black', 'Ocean Blue', 'Rose Gold'].map((c) {
+                        children:
+                            ['Matte Black', 'Ocean Blue', 'Rose Gold'].map((c) {
                           final isSelected = _selectedColor == c;
                           return Padding(
                             padding: const EdgeInsets.only(right: 6),
@@ -1727,11 +1804,14 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                                 c,
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: isSelected ? cs.primary : cs.onSurface.withOpacity(0.7),
+                                  color: isSelected
+                                      ? cs.primary
+                                      : cs.onSurface.withOpacity(0.7),
                                 ),
                               ),
                               selected: isSelected,
-                              onSelected: (_) => setState(() => _selectedColor = c),
+                              onSelected: (_) =>
+                                  setState(() => _selectedColor = c),
                               backgroundColor: Colors.transparent,
                               selectedColor: cs.primary.withOpacity(0.08),
                               shape: RoundedRectangleBorder(
@@ -1748,7 +1828,10 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                       const SizedBox(height: 12),
                       Text(
                         'Cushion Size',
-                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: cs.onSurface.withOpacity(0.5)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: cs.onSurface.withOpacity(0.5)),
                       ),
                       const SizedBox(height: 6),
                       Row(
@@ -1761,11 +1844,14 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                                 s,
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: isSelected ? cs.primary : cs.onSurface.withOpacity(0.7),
+                                  color: isSelected
+                                      ? cs.primary
+                                      : cs.onSurface.withOpacity(0.7),
                                 ),
                               ),
                               selected: isSelected,
-                              onSelected: (_) => setState(() => _selectedSize = s),
+                              onSelected: (_) =>
+                                  setState(() => _selectedSize = s),
                               backgroundColor: Colors.transparent,
                               selectedColor: cs.primary.withOpacity(0.08),
                               shape: RoundedRectangleBorder(
@@ -1782,7 +1868,10 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                       const SizedBox(height: 16),
                       Text(
                         'Specs: 30hr Playtime, Active Noise Cancelling, Premium Bluetooth 5.3 Audio.',
-                        style: TextStyle(fontSize: 11, color: cs.onSurface.withOpacity(0.5), height: 1.4),
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: cs.onSurface.withOpacity(0.5),
+                            height: 1.4),
                       ),
                       const Spacer(),
                       SizedBox(
@@ -1802,8 +1891,12 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
                             );
                             _controller.flip();
                           },
-                          icon: Icon(_addedToCart ? Icons.check : Icons.shopping_cart, size: 16),
-                          label: Text(_addedToCart ? 'Added to Cart' : 'Add to Cart (\$199.99)'),
+                          icon: Icon(
+                              _addedToCart ? Icons.check : Icons.shopping_cart,
+                              size: 16),
+                          label: Text(_addedToCart
+                              ? 'Added to Cart'
+                              : 'Add to Cart (\$199.99)'),
                         ),
                       ),
                     ],
@@ -1815,7 +1908,8 @@ class _EcommerceShowcaseState extends State<_EcommerceShowcase> {
           const SizedBox(height: 24),
           const _ShowcaseExplanation(
             title: 'E-Commerce Customizer Showcase',
-            description: 'An interactive product card that flips to reveal customization options. It features custom choice chips, rating stars, and add-to-cart integration. Flipping is triggered via action buttons, demonstrating how the card can act as a container for detailed forms or product attributes.',
+            description:
+                'An interactive product card that flips to reveal customization options. It features custom choice chips, rating stars, and add-to-cart integration. Flipping is triggered via action buttons, demonstrating how the card can act as a container for detailed forms or product attributes.',
           ),
         ],
       ),
@@ -1838,15 +1932,18 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
   static const _cards = [
     {
       'q': 'What is the purpose of RepaintBoundary?',
-      'a': 'It isolates repaint cycles, meaning when this widget paints, it does not force its parent or sibling widgets to repaint.',
+      'a':
+          'It isolates repaint cycles, meaning when this widget paints, it does not force its parent or sibling widgets to repaint.',
     },
     {
       'q': 'How does Clip.hardEdge optimize performance?',
-      'a': 'It clips using faster stencil/scissor paths on the GPU, avoiding offscreen save-layer allocations required by Clip.antiAlias.',
+      'a':
+          'It clips using faster stencil/scissor paths on the GPU, avoiding offscreen save-layer allocations required by Clip.antiAlias.',
     },
     {
       'q': 'Why cache Animation objects in FlipCard?',
-      'a': 'To avoid creating 4 new animation objects per frame tick, reducing Garbage Collection allocations to exactly zero.',
+      'a':
+          'To avoid creating 4 new animation objects per frame tick, reducing Garbage Collection allocations to exactly zero.',
     },
   ];
 
@@ -1864,11 +1961,17 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
             children: [
               Text(
                 'Score: $_score / ${_cards.length}',
-                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13, color: cs.onSurface.withOpacity(0.6)),
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 13,
+                    color: cs.onSurface.withOpacity(0.6)),
               ),
               Text(
                 'Card ${_currentIndex + 1} of ${_cards.length}',
-                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13, color: cs.onSurface.withOpacity(0.6)),
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 13,
+                    color: cs.onSurface.withOpacity(0.6)),
               ),
             ],
           ),
@@ -1902,18 +2005,27 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
                     children: [
                       Text(
                         'QUESTION',
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: cs.onSurface.withOpacity(0.4)),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                            color: cs.onSurface.withOpacity(0.4)),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         card['q']!,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, height: 1.4, color: cs.onSurface),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            height: 1.4,
+                            color: cs.onSurface),
                         textAlign: TextAlign.center,
                       ),
                       const Spacer(),
                       Text(
                         'Tap to reveal answer',
-                        style: TextStyle(fontSize: 11, color: cs.onSurface.withOpacity(0.4)),
+                        style: TextStyle(
+                            fontSize: 11, color: cs.onSurface.withOpacity(0.4)),
                       ),
                     ],
                   ),
@@ -1932,12 +2044,20 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
                     children: [
                       Text(
                         'ANSWER',
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: cs.onSurface.withOpacity(0.4)),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                            color: cs.onSurface.withOpacity(0.4)),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         card['a']!,
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300, color: cs.onSurface.withOpacity(0.8), height: 1.4),
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                            color: cs.onSurface.withOpacity(0.8),
+                            height: 1.4),
                         textAlign: TextAlign.center,
                       ),
                       const Spacer(),
@@ -1954,20 +2074,26 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(color: cs.outline),
                               foregroundColor: cs.onSurface,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                             ),
-                            icon: Icon(Icons.check, color: cs.primary, size: 14),
-                            label: const Text('Got it!', style: TextStyle(fontSize: 12)),
+                            icon:
+                                Icon(Icons.check, color: cs.primary, size: 14),
+                            label: const Text('Got it!',
+                                style: TextStyle(fontSize: 12)),
                           ),
                           OutlinedButton.icon(
                             onPressed: _nextCard,
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(color: cs.outline),
                               foregroundColor: cs.onSurface,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                             ),
-                            icon: Icon(Icons.refresh, color: cs.onSurface.withOpacity(0.6), size: 14),
-                            label: const Text('Practice', style: TextStyle(fontSize: 12)),
+                            icon: Icon(Icons.refresh,
+                                color: cs.onSurface.withOpacity(0.6), size: 14),
+                            label: const Text('Practice',
+                                style: TextStyle(fontSize: 12)),
                           ),
                         ],
                       ),
@@ -1980,7 +2106,8 @@ class _FlashcardShowcaseState extends State<_FlashcardShowcase> {
           const SizedBox(height: 24),
           const _ShowcaseExplanation(
             title: 'Interactive Learning Flashcards',
-            description: 'An educational study card system demonstrating progress tracking and programmatic flipping. When the user flips without animation to reset the side, it showcases instant side-switching using flipWithoutAnimation().',
+            description:
+                'An educational study card system demonstrating progress tracking and programmatic flipping. When the user flips without animation to reset the side, it showcases instant side-switching using flipWithoutAnimation().',
           ),
         ],
       ),
@@ -2033,7 +2160,10 @@ class _BusinessCardShowcase extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           'H',
-                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w200, color: cs.onSurface),
+                          style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w200,
+                              color: cs.onSurface),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -2044,21 +2174,34 @@ class _BusinessCardShowcase extends StatelessWidget {
                           children: [
                             Text(
                               'Hadi',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: cs.onSurface, letterSpacing: 0.5),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: cs.onSurface,
+                                  letterSpacing: 0.5),
                             ),
                             Text(
                               'Lead Architect & Creator',
-                              style: TextStyle(fontSize: 11, color: cs.onSurface.withOpacity(0.6), fontWeight: FontWeight.w300),
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: cs.onSurface.withOpacity(0.6),
+                                  fontWeight: FontWeight.w300),
                             ),
                             const SizedBox(height: 14),
                             Text(
                               'hadi7786x@gmail.com',
-                              style: TextStyle(fontSize: 10, color: cs.onSurface.withOpacity(0.7), fontFamily: 'monospace'),
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: cs.onSurface.withOpacity(0.7),
+                                  fontFamily: 'monospace'),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               'github.com/Itsxhadi',
-                              style: TextStyle(fontSize: 10, color: cs.onSurface.withOpacity(0.7), fontFamily: 'monospace'),
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: cs.onSurface.withOpacity(0.7),
+                                  fontFamily: 'monospace'),
                             ),
                           ],
                         ),
@@ -2082,12 +2225,17 @@ class _BusinessCardShowcase extends StatelessWidget {
                           children: [
                             Text(
                               'Scan to Connect',
-                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: cs.onSurface),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: cs.onSurface),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'Hover or tap to check details on the front.',
-                              style: TextStyle(fontSize: 10, color: cs.onSurface.withOpacity(0.5)),
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: cs.onSurface.withOpacity(0.5)),
                             ),
                             const SizedBox(height: 16),
                             FilledButton(
@@ -2098,7 +2246,8 @@ class _BusinessCardShowcase extends StatelessWidget {
                                   ),
                                 );
                               },
-                              child: const Text('Save Info', style: TextStyle(fontSize: 11)),
+                              child: const Text('Save Info',
+                                  style: TextStyle(fontSize: 11)),
                             ),
                           ],
                         ),
@@ -2115,7 +2264,8 @@ class _BusinessCardShowcase extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         child: GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 5,
                             crossAxisSpacing: 3,
                             mainAxisSpacing: 3,
@@ -2125,7 +2275,9 @@ class _BusinessCardShowcase extends StatelessWidget {
                             final isDark = (i * i + i * 3) % 2 == 0;
                             return Container(
                               decoration: BoxDecoration(
-                                color: isDark ? cs.onSurface.withOpacity(0.7) : Colors.transparent,
+                                color: isDark
+                                    ? cs.onSurface.withOpacity(0.7)
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(1),
                               ),
                             );
@@ -2141,7 +2293,8 @@ class _BusinessCardShowcase extends StatelessWidget {
           const SizedBox(height: 24),
           const _ShowcaseExplanation(
             title: 'Interactive Business Card',
-            description: 'A premium digital business card showing profile info on the front and contact actions/QR code on the back. It demonstrates the use of hover-to-flip on desktop and tap-to-flip on mobile, showing adaptive user experience.',
+            description:
+                'A premium digital business card showing profile info on the front and contact actions/QR code on the back. It demonstrates the use of hover-to-flip on desktop and tap-to-flip on mobile, showing adaptive user experience.',
           ),
         ],
       ),
@@ -2173,16 +2326,20 @@ class _ShowcaseExplanation extends StatelessWidget {
               children: [
                 Icon(Icons.info_outline, size: 18, color: cs.primary),
                 const SizedBox(width: 8),
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                Text(title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 13)),
               ],
             ),
             const SizedBox(height: 8),
-            Text(description, style: TextStyle(fontSize: 12, color: cs.onSurface.withOpacity(0.7), height: 1.4)),
+            Text(description,
+                style: TextStyle(
+                    fontSize: 12,
+                    color: cs.onSurface.withOpacity(0.7),
+                    height: 1.4)),
           ],
         ),
       ),
     );
   }
 }
-
-

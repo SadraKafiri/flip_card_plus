@@ -162,8 +162,7 @@ class FlipCardPlusTransition extends StatefulWidget {
   }) =>
       TweenSequence([
         TweenSequenceItem<double>(
-          tween:
-              Tween(begin: 0.0, end: pi / 2).chain(CurveTween(curve: curve)),
+          tween: Tween(begin: 0.0, end: pi / 2).chain(CurveTween(curve: curve)),
           weight: 50.0,
         ),
         TweenSequenceItem<double>(
@@ -220,11 +219,11 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
     super.initState();
     _front = widget.front;
     _back = widget.back;
-    
+
     double progress = widget.animation.value % 2.0;
     if (progress < 0) progress += 2.0;
     _isFrontHalf = progress <= 0.5 || progress >= 1.5;
-    
+
     widget.animation.addListener(_handleAnimationUpdate);
     _updateAnimations();
   }
@@ -240,7 +239,7 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
         widget.keepSameDirection != oldWidget.keepSameDirection) {
       oldWidget.animation.removeListener(_handleAnimationUpdate);
       widget.animation.addListener(_handleAnimationUpdate);
-      
+
       double progress = widget.animation.value % 2.0;
       if (progress < 0) progress += 2.0;
       _isFrontHalf = progress <= 0.5 || progress >= 1.5;
@@ -346,7 +345,8 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
     final isFront = child == _front;
     final showingFront = _isFrontHalf;
 
-    final Animation<double> animation = isFront ? _frontAnimation : _backAnimation;
+    final Animation<double> animation =
+        isFront ? _frontAnimation : _backAnimation;
 
     final resolvedDirection = widget.flipDirection ??
         (widget.direction == Axis.vertical
@@ -378,7 +378,8 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
     // Apply dynamic shadow if elevation > 0.0
     if (widget.elevation > 0.0) {
       final progress = 1.0 - (widget.animation.value - 0.5).abs() * 2;
-      final currentElevation = widget.elevation + (widget.elevation * 0.8 * progress);
+      final currentElevation =
+          widget.elevation + (widget.elevation * 0.8 * progress);
       final blurRadius = currentElevation * 2.0;
       final offsetY = currentElevation * 0.8;
       final shadowColor = (widget.shadowColor ?? Colors.black).withValues(
@@ -456,8 +457,7 @@ class FlipPlusTransition extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPerpendicular =
-        (animation.value.abs() - (pi / 2)).abs() < 0.0001;
+    final isPerpendicular = (animation.value.abs() - (pi / 2)).abs() < 0.0001;
     final isFlat = animation.value == 0.0;
 
     Widget result = child;
@@ -518,4 +518,3 @@ class _MappedAnimation extends Animation<double>
     }
   }
 }
-

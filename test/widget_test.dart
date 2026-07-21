@@ -69,7 +69,8 @@ void main() {
     await widgetTester.tap(find.byType(FlipCardPlus));
     await widgetTester.pumpAndSettle();
 
-    final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
+    final state =
+        widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
     expect(state.currentSide, CardSide.back,
         reason: 'Ensure card flipped back');
 
@@ -94,7 +95,8 @@ void main() {
         ),
       );
 
-      final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
+      final state =
+          widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
       expect(state.currentSide, CardSide.front);
 
       await widgetTester.tap(find.byType(FlipCardPlus));
@@ -115,7 +117,8 @@ void main() {
         ),
       );
 
-      final state = widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
+      final state =
+          widgetTester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
       expect(state.currentSide, CardSide.back);
 
       await widgetTester.tap(find.byType(FlipCardPlus));
@@ -165,7 +168,8 @@ void main() {
       await tester.tap(find.byType(FlipCardPlus));
       await tester.pumpAndSettle();
       expect(
-        state.currentSide, CardSide.front,
+        state.currentSide,
+        CardSide.front,
         reason: 'Should not have turned by tapping',
       );
 
@@ -175,7 +179,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        state.currentSide, CardSide.back,
+        state.currentSide,
+        CardSide.back,
         reason: 'Should have turned by manually calling flip',
       );
     });
@@ -296,8 +301,8 @@ void main() {
         ),
       );
 
-      final transition =
-          tester.widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
+      final transition = tester
+          .widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
       expect(transition.flipDirection, FlipDirection.horizontalRight);
 
       final transitions = tester
@@ -376,7 +381,8 @@ void main() {
   // ── Declarative side control ───────────────────────────────────────────
 
   group('declarative side control', () {
-    testWidgets('initializes to the specified side', (WidgetTester tester) async {
+    testWidgets('initializes to the specified side',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -392,7 +398,8 @@ void main() {
       expect(state.currentSide, CardSide.back);
     });
 
-    testWidgets('flips when side parameter changes', (WidgetTester tester) async {
+    testWidgets('flips when side parameter changes',
+        (WidgetTester tester) async {
       CardSide currentSide = CardSide.front;
 
       await tester.pumpWidget(
@@ -438,7 +445,8 @@ void main() {
   // ── Deferred widget updates ────────────────────────────────────────────
 
   group('deferred widget updates', () {
-    testWidgets('defers widget update until invisible', (WidgetTester tester) async {
+    testWidgets('defers widget update until invisible',
+        (WidgetTester tester) async {
       String frontText = 'Q1';
       String backText = 'A1';
 
@@ -551,12 +559,14 @@ void main() {
         ),
       );
 
-      final transformWidgets = tester.widgetList<Transform>(
-        find.descendant(
-          of: find.byType(FlipPlusTransition),
-          matching: find.byType(Transform),
-        ),
-      ).toList();
+      final transformWidgets = tester
+          .widgetList<Transform>(
+            find.descendant(
+              of: find.byType(FlipPlusTransition),
+              matching: find.byType(Transform),
+            ),
+          )
+          .toList();
 
       expect(transformWidgets.isEmpty, true);
     });
@@ -565,7 +575,8 @@ void main() {
   // ── sizeToActiveSide ──────────────────────────────────────────────────
 
   group('sizeToActiveSide', () {
-    testWidgets('respects sizeToActiveSide parameter', (WidgetTester tester) async {
+    testWidgets('respects sizeToActiveSide parameter',
+        (WidgetTester tester) async {
       final controller = FlipCardPlusController();
 
       await tester.pumpWidget(
@@ -623,6 +634,7 @@ void main() {
           if (element.widget.key == key) found = true;
           element.visitChildren(visit);
         }
+
         visit(parent);
         return found;
       }
@@ -656,7 +668,8 @@ void main() {
   // ── isDisabled ─────────────────────────────────────────────────────────
 
   group('isDisabled', () {
-    testWidgets('prevents flip on tap when disabled', (WidgetTester tester) async {
+    testWidgets('prevents flip on tap when disabled',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -825,7 +838,8 @@ void main() {
       expect(state.flipCount, 4);
     });
 
-    testWidgets('does not increment when isDisabled', (WidgetTester tester) async {
+    testWidgets('does not increment when isDisabled',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -862,16 +876,16 @@ void main() {
       );
 
       // There should be two ClipRRect widgets (one per face)
-      final clips = tester
-          .widgetList<ClipRRect>(find.byType(ClipRRect))
-          .toList();
+      final clips =
+          tester.widgetList<ClipRRect>(find.byType(ClipRRect)).toList();
       expect(clips.length, 2);
       for (final clip in clips) {
         expect(clip.borderRadius, radius);
       }
     });
 
-    testWidgets('no ClipRRect without borderRadius', (WidgetTester tester) async {
+    testWidgets('no ClipRRect without borderRadius',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -903,8 +917,8 @@ void main() {
         ),
       );
 
-      final transition =
-          tester.widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
+      final transition = tester
+          .widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
       expect(transition.curve, Curves.elasticOut);
       expect(transition.reverseCurve, Curves.bounceIn);
     });
@@ -927,13 +941,13 @@ void main() {
       );
 
       final semantics = tester.widgetList<Semantics>(find.byType(Semantics));
-      final labeled = semantics
-          .where((s) => s.properties.label == 'Product card')
-          .toList();
+      final labeled =
+          semantics.where((s) => s.properties.label == 'Product card').toList();
       expect(labeled.isNotEmpty, true);
     });
 
-    testWidgets('no Semantics widget without label', (WidgetTester tester) async {
+    testWidgets('no Semantics widget without label',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -946,7 +960,8 @@ void main() {
 
       final semanticsWithLabel = tester
           .widgetList<Semantics>(find.byType(Semantics))
-          .where((s) => s.properties.label != null && s.properties.label!.isNotEmpty)
+          .where((s) =>
+              s.properties.label != null && s.properties.label!.isNotEmpty)
           .toList();
       expect(semanticsWithLabel.isEmpty, true);
     });
@@ -1050,7 +1065,8 @@ void main() {
   // ── flipOnHover ─────────────────────────────────────────────────────────
 
   group('flipOnHover', () {
-    testWidgets('hovering over card flips to back, exiting flips to front', (WidgetTester tester) async {
+    testWidgets('hovering over card flips to back, exiting flips to front',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1069,7 +1085,7 @@ void main() {
       final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
       await gesture.addPointer(location: Offset.zero);
       await tester.pump();
-      
+
       final center = tester.getCenter(find.byType(FlipCardPlus));
       await gesture.moveTo(center);
       await tester.pumpAndSettle();
@@ -1089,7 +1105,8 @@ void main() {
   // ── perspective ──────────────────────────────────────────────────────────
 
   group('perspective', () {
-    testWidgets('custom perspective propagates to FlipPlusTransition', (WidgetTester tester) async {
+    testWidgets('custom perspective propagates to FlipPlusTransition',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1101,7 +1118,8 @@ void main() {
         ),
       );
 
-      final transition = tester.widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
+      final transition = tester
+          .widget<FlipCardPlusTransition>(find.byType(FlipCardPlusTransition));
       expect(transition.perspective, 0.005);
     });
   });
@@ -1109,7 +1127,8 @@ void main() {
   // ── elevation & shadowColor ──────────────────────────────────────────────
 
   group('elevation and shadowColor', () {
-    testWidgets('dynamic shadow is rendered with elevation > 0', (WidgetTester tester) async {
+    testWidgets('dynamic shadow is rendered with elevation > 0',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1125,11 +1144,12 @@ void main() {
       final decoratedBoxFinder = find.byType(DecoratedBox);
       expect(decoratedBoxFinder, findsWidgets);
 
-      final decoratedBox = tester.widgetList<DecoratedBox>(decoratedBoxFinder).first;
+      final decoratedBox =
+          tester.widgetList<DecoratedBox>(decoratedBoxFinder).first;
       final decoration = decoratedBox.decoration as BoxDecoration;
       expect(decoration.boxShadow, isNotNull);
       expect(decoration.boxShadow!.length, 1);
-      
+
       final shadow = decoration.boxShadow!.first;
       expect(shadow.color.withAlpha(255), Colors.red.withAlpha(255));
       // At start of animation, progress = 0.0, currentElevation = 8.0, blurRadius = 16.0
@@ -1140,7 +1160,8 @@ void main() {
   // ── rtlAware ─────────────────────────────────────────────────────────────
 
   group('rtlAware text direction', () {
-    testWidgets('reverses multiplier in RTL layout', (WidgetTester tester) async {
+    testWidgets('reverses multiplier in RTL layout',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.rtl,
@@ -1157,7 +1178,9 @@ void main() {
       expect(state.effectiveFlipMultiplier, -1.0);
     });
 
-    testWidgets('does not reverse multiplier in RTL layout if rtlAware is false', (WidgetTester tester) async {
+    testWidgets(
+        'does not reverse multiplier in RTL layout if rtlAware is false',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.rtl,
@@ -1177,7 +1200,8 @@ void main() {
   // ── keyboard focus and triggers ─────────────────────────────────────────
 
   group('keyboard focus and triggers', () {
-    testWidgets('focused card flips on Space and Enter keys', (WidgetTester tester) async {
+    testWidgets('focused card flips on Space and Enter keys',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1212,7 +1236,8 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
       expect(state.currentSide, CardSide.front,
-          reason: 'Pressing Enter key on focused card should trigger flip back');
+          reason:
+              'Pressing Enter key on focused card should trigger flip back');
     });
   });
 
@@ -1227,12 +1252,12 @@ void main() {
             return Directionality(
               textDirection: TextDirection.ltr,
               child: showCard
-                   ? const FlipCardPlus(
-                       autoFlipDuration: Duration(milliseconds: 100),
-                       front: Text('front'),
-                       back: Text('back'),
-                     )
-                   : const SizedBox(),
+                  ? const FlipCardPlus(
+                      autoFlipDuration: Duration(milliseconds: 100),
+                      front: Text('front'),
+                      back: Text('back'),
+                    )
+                  : const SizedBox(),
             );
           },
         ),
@@ -1248,12 +1273,12 @@ void main() {
             return Directionality(
               textDirection: TextDirection.ltr,
               child: showCard
-                   ? const FlipCardPlus(
-                       autoFlipDuration: Duration(milliseconds: 100),
-                       front: Text('front'),
-                       back: Text('back'),
-                     )
-                   : const SizedBox(),
+                  ? const FlipCardPlus(
+                      autoFlipDuration: Duration(milliseconds: 100),
+                      front: Text('front'),
+                      back: Text('back'),
+                    )
+                  : const SizedBox(),
             );
           },
         ),
@@ -1270,7 +1295,8 @@ void main() {
   // ── focusable: false ─────────────────────────────────────────────────────
 
   group('focusable: false', () {
-    testWidgets('does not wrap in Focus widget when focusable is false', (WidgetTester tester) async {
+    testWidgets('does not wrap in Focus widget when focusable is false',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1322,7 +1348,8 @@ void main() {
       return tester.state<FlipCardPlusState>(find.byType(FlipCardPlus));
     }
 
-    testWidgets('dragThreshold: 0.1 commits flip early', (WidgetTester tester) async {
+    testWidgets('dragThreshold: 0.1 commits flip early',
+        (WidgetTester tester) async {
       final state = await buildThresholdCard(tester, 0.1);
 
       // Drag 40px left (13% of 300px, which is > 10% threshold)
@@ -1338,10 +1365,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(state.currentSide, CardSide.back,
-          reason: 'Should commit flip because drag (13%) is above threshold (10%)');
+          reason:
+              'Should commit flip because drag (13%) is above threshold (10%)');
     });
 
-    testWidgets('dragThreshold: 0.9 reverts flip late', (WidgetTester tester) async {
+    testWidgets('dragThreshold: 0.9 reverts flip late',
+        (WidgetTester tester) async {
       final state = await buildThresholdCard(tester, 0.9);
 
       // Drag 240px left (80% of 300px, which is < 90% threshold)
@@ -1357,14 +1386,16 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(state.currentSide, CardSide.front,
-          reason: 'Should snap back because drag (80%) is below threshold (90%)');
+          reason:
+              'Should snap back because drag (80%) is below threshold (90%)');
     });
   });
 
   // ── succession of rapid flip calls ──────────────────────────────────────
 
   group('succession of rapid flip calls', () {
-    testWidgets('multiple fast flip calls do not crash or throw', (WidgetTester tester) async {
+    testWidgets('multiple fast flip calls do not crash or throw',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1392,7 +1423,8 @@ void main() {
   // ── useRepaintBoundary ───────────────────────────────────────────────────
 
   group('useRepaintBoundary', () {
-    testWidgets('renders RepaintBoundary when true', (WidgetTester tester) async {
+    testWidgets('renders RepaintBoundary when true',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1408,10 +1440,12 @@ void main() {
         of: find.byType(FlipCardPlus),
         matching: find.byType(RepaintBoundary),
       );
-      expect(repaintBoundaries, findsNWidgets(2)); // Front & Back faces each get one
+      expect(repaintBoundaries,
+          findsNWidgets(2)); // Front & Back faces each get one
     });
 
-    testWidgets('does not render RepaintBoundary when false', (WidgetTester tester) async {
+    testWidgets('does not render RepaintBoundary when false',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1434,7 +1468,8 @@ void main() {
   // ── clipBehavior ─────────────────────────────────────────────────────────
 
   group('clipBehavior', () {
-    testWidgets('applies custom clipBehavior to ClipRRect', (WidgetTester tester) async {
+    testWidgets('applies custom clipBehavior to ClipRRect',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
@@ -1455,5 +1490,3 @@ void main() {
     });
   });
 }
-
-
