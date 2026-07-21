@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'flip_card.dart';
 
-Widget _fill(Widget child) => Positioned.fill(child: child);
-Widget _noop(Widget child) => child;
+Widget _fill(Widget child, Key key) => Positioned.fill(key: key, child: child);
+Widget _noop(Widget child, Key key) => KeyedSubtree(key: key, child: child);
 
 /// The transition used internally by [FlipCardPlus].
 ///
@@ -317,19 +317,22 @@ class _FlipCardPlusTransitionState extends State<FlipCardPlusTransition> {
     final Widget frontChild;
     final Widget backChild;
 
+    const frontKey = ValueKey('FlipCardPlus_Front_Key');
+    const backKey = ValueKey('FlipCardPlus_Back_Key');
+
     if (widget.sizeToActiveSide) {
       if (showingFront) {
-        frontChild = _noop(_buildContent(child: _front));
-        backChild = _fill(_buildContent(child: _back));
+        frontChild = _noop(_buildContent(child: _front), frontKey);
+        backChild = _fill(_buildContent(child: _back), backKey);
       } else {
-        frontChild = _fill(_buildContent(child: _front));
-        backChild = _noop(_buildContent(child: _back));
+        frontChild = _fill(_buildContent(child: _front), frontKey);
+        backChild = _noop(_buildContent(child: _back), backKey);
       }
     } else {
       final frontPositioning = widget.fill == Fill.front ? _fill : _noop;
       final backPositioning = widget.fill == Fill.back ? _fill : _noop;
-      frontChild = frontPositioning(_buildContent(child: _front));
-      backChild = backPositioning(_buildContent(child: _back));
+      frontChild = frontPositioning(_buildContent(child: _front), frontKey);
+      backChild = backPositioning(_buildContent(child: _back), backKey);
     }
 
     return Stack(
